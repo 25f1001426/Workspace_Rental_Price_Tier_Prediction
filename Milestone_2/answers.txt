@@ -1,0 +1,7 @@
+1. Data preprocessing is the process of cleaning, transforming, and organizing raw data into a structured format so that machine learning algorithms can analyze and learn from it effectively.
+  On the basis of the EDA done for the given dataset following preprocessing steps are required:
+     1.Handle missing numerical values
+     2. Handling missing categorical values
+     3. Encoding categorical values
+     4. Converting date columns
+     5. Some feature engineering

@@ -54,3 +54,34 @@ print("\nDate columns:", date_cols)
 print("\nSpecial columns:", special_cols)
 print("\nExcluded from baseline:", excluded_cols)
 
+#3
+#example for just 1 column to show how imputation works
+from sklearn.impute import SimpleImputer
+import matplotlib.pyplot as plt
+
+col = "operator_portfolio_size"
+
+original = train[col].copy()
+
+imputer = SimpleImputer(strategy="median")
+imputed = imputer.fit_transform(
+    train[[col]]
+).ravel()
+
+print("Missing before:", original.isna().sum())
+print("Missing after:", pd.isna(imputed).sum())
+print("Original median:", original.median())
+print("Imputed median:", pd.Series(imputed).median())
+print("Original standard deviation:", original.std())
+print("Imputed standard deviation:", pd.Series(imputed).std())
+
+fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+
+original.dropna().hist(bins=40, ax=axes[0])
+axes[0].set_title("Before Imputation")
+
+pd.Series(imputed).hist(bins=40, ax=axes[1])
+axes[1].set_title("After Median Imputation")
+
+plt.tight_layout()
+plt.show()

@@ -161,3 +161,25 @@ numeric_pipeline = Pipeline([
 preprocessor = ColumnTransformer([
     ("numeric", numeric_pipeline, numerical_cols),
 ], remainder="drop")
+
+#6
+
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
+
+categorical_pipeline = Pipeline([
+    ("imputer", SimpleImputer(
+        strategy="constant",
+        fill_value="Missing"
+    )),
+    ("encoder", OneHotEncoder(
+        handle_unknown="ignore",
+        min_frequency=20
+    ))
+])
+
+preprocessor = ColumnTransformer([
+    ("categorical", categorical_pipeline, low_cardinality_cols)
+], remainder="drop")

@@ -145,3 +145,19 @@ for i, col in enumerate(outlier_cols):
 
 plt.tight_layout()
 plt.show()
+
+#5
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+
+numeric_pipeline = Pipeline([
+    ("imputer", SimpleImputer(strategy="median")),
+    ("scaler", StandardScaler())
+])
+
+preprocessor = ColumnTransformer([
+    ("numeric", numeric_pipeline, numerical_cols),
+], remainder="drop")

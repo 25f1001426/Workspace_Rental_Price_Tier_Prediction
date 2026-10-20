@@ -19,3 +19,6 @@ Scaling transforms numerical features to comparable ranges. It is important for 
 Scaling methods considered are:
 Standard Scaler
 Min-Max scaler
+
+#7
+he dataset contains dates, facility lists, geographic coordinates, and identifiers. These columns require different treatments because converting them directly to categorical numbers could lose useful information or introduce artificial relationships.Date columns contain useful temporal information that raw strings cannot provide directly to most models. Extracting components converts them into usable numerical features.The facilities column has approximately 251,649 distinct combinations, making direct one-hot encoding impractical for the initial baseline. We therefore exclude the raw column and may test a simple feature such as the number of facilities offered.

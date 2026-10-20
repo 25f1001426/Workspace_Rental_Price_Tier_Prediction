@@ -85,3 +85,63 @@ axes[1].set_title("After Median Imputation")
 
 plt.tight_layout()
 plt.show()
+
+#4
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+outlier_cols = [
+    "operator_portfolio_size",
+    "review_count",
+    "booked_load",
+    "max_term_days"
+]
+
+comparison_rows = []
+
+for col in outlier_cols:
+    s = train[col].dropna()
+
+    q1 = s.quantile(0.25)
+    q3 = s.quantile(0.75)
+    iqr = q3 - q1
+
+    lower = q1 - 1.5 * iqr
+    upper = q3 + 1.5 * iqr
+
+    comparison_rows.append({
+        "feature": col,
+        "original_min": s.min(),
+        "original_median": s.median(),
+        "original_max": s.max(),
+        "IQR_lower": lower,
+        "IQR_upper": upper,
+        "IQR_outlier_count": ((s < lower) | (s > upper)).sum()
+    })
+
+display(pd.DataFrame(comparison_rows).set_index("feature"))
+fig, axes = plt.subplots(
+    len(outlier_cols), 2, figsize=(12, 4 * len(outlier_cols))
+)
+
+for i, col in enumerate(outlier_cols):
+    s = train[col].dropna()
+
+    q1 = s.quantile(0.25)
+    q3 = s.quantile(0.75)
+    iqr = q3 - q1
+
+    lower = max(0, q1 - 1.5 * iqr) if s.min() >= 0 else q1 - 1.5 * iqr
+    upper = q3 + 1.5 * iqr
+
+    capped = s.clip(lower=lower, upper=upper)
+
+    axes[i, 0].boxplot(s)
+    axes[i, 0].set_title(f"{col}: Original")
+
+    axes[i, 1].boxplot(capped)
+    axes[i, 1].set_title(f"{col}: Diagnostic IQR Capping")
+
+plt.tight_layout()
+plt.show()

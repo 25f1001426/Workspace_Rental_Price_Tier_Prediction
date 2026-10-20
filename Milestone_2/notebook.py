@@ -183,3 +183,25 @@ categorical_pipeline = Pipeline([
 preprocessor = ColumnTransformer([
     ("categorical", categorical_pipeline, low_cardinality_cols)
 ], remainder="drop")
+
+# Paste the code you ran for this question
+for df in [X, X_test]:
+    for col in date_cols:
+        dates = pd.to_datetime(df[col], errors="coerce")
+        df[f"{col}_year"] = dates.dt.year
+        df[f"{col}_month"] = dates.dt.month
+        df[f"{col}_dayofweek"] = dates.dt.dayofweek
+
+    df.drop(columns=date_cols, inplace=True)
+import ast
+def count_facilities(value):
+    if pd.isna(value):
+        return 0
+    try:
+        parsed = ast.literal_eval(value)
+        return len(parsed) if isinstance(parsed, list) else 0
+    except (ValueError, SyntaxError):
+        return 0
+
+X["facility_count"] = train["facilities"].apply(count_facilities)
+X_test["facility_count"] = test["facilities"].apply(count_facilities)
